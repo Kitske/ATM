@@ -32,3 +32,7 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
+
+#RESOURCES += path/to/ATM.svg
+
+DISTFILES +=

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/ATM.svg</file>
+    </qresource>
+</RCC>

@@ -18,7 +18,7 @@ private slots:
 
 private:
     Ui::CardInputDialog *ui;
-    bool isCardNumberServerApproved(QString &);
+    bool isUserSigningInIsServerApproved(QString &,QString &);
 };
 
 #endif // CARDINPUTDIALOG_H

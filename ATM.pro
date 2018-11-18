@@ -25,13 +25,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    cardinputdialog.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    cardinputdialog.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    cardinputdialog.ui
 
 #RESOURCES += path/to/ATM.svg
 

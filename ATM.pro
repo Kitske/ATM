@@ -27,17 +27,20 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     cardinputdialog.cpp \
-    givecashdialog.cpp
+    givecashdialog.cpp \
+    addcashdialog.cpp
 
 HEADERS += \
         mainwindow.h \
     cardinputdialog.h \
-    givecashdialog.h
+    givecashdialog.h \
+    addcashdialog.h
 
 FORMS += \
         mainwindow.ui \
     cardinputdialog.ui \
-    givecashdialog.ui
+    givecashdialog.ui \
+    addcashdialog.ui
 
 #RESOURCES += path/to/ATM.svg
 

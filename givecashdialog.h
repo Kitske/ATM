@@ -15,6 +15,7 @@ public:
     explicit GiveCashDialog(QWidget *);
     ~GiveCashDialog();
     void changeLabels(const int,const int,const int *);
+
 private slots:
     void on_GiveCashDialog_finished(int result);
 

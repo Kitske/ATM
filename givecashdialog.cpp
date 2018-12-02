@@ -33,7 +33,6 @@ void GiveCashDialog::changeLabels(const int sumProcessed,const int allValuesProc
     valueCount4->setText(QString::number(nominalValueCountProcessed[3]));
     valueCount5->setText(QString::number(nominalValueCountProcessed[4]));
     valueCount6->setText(QString::number(nominalValueCountProcessed[5]));
-
 }
 
 void GiveCashDialog::on_GiveCashDialog_finished(int result)

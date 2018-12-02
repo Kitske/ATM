@@ -1,6 +1,8 @@
 #include "cardinputdialog.h"
 #include "ui_cardinputdialog.h"
 #include <QRegExpValidator>
+#include "mainwindow.h"
+#include <QPushButton>
 
 CardInputDialog::CardInputDialog(QWidget *parent) :
     QDialog(parent),
@@ -18,6 +20,9 @@ CardInputDialog::CardInputDialog(QWidget *parent) :
     QRegExp re1("^\\d{4}$");
     QRegExpValidator *validator1 = new QRegExpValidator(re1, this);
     le1->setValidator(validator1);
+    QDialogButtonBox * bb = findChild<QDialogButtonBox*>("buttonBox");
+    bb->button(QDialogButtonBox::Ok)->setText("Ок");
+    bb->button(QDialogButtonBox::Cancel)->setText("Назад");
 }
 
 CardInputDialog::~CardInputDialog()
@@ -45,14 +50,11 @@ void CardInputDialog::on_buttonBox_accepted()
     QRegExp re1("^\\d{4}$");
 
     if(num.contains(re)&&pin.contains(re1)&&isUserSigningInIsServerApproved(num,pin)){
-
-
-
-        le->setText("");
-        le1->setText("");
+        (static_cast<MainWindow *>(parent()))->startSessionWithCard(num);
     }
     else{
 
     }
-
+    le->setText("");
+    le1->setText("");
 }

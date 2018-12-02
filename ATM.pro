@@ -26,16 +26,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    cardinputdialog.cpp
+    cardinputdialog.cpp \
+    givecashdialog.cpp
 
 HEADERS += \
         mainwindow.h \
-    cardinputdialog.h
+    cardinputdialog.h \
+    givecashdialog.h
 
 FORMS += \
         mainwindow.ui \
-    cardinputdialog.ui
+    cardinputdialog.ui \
+    givecashdialog.ui
 
 #RESOURCES += path/to/ATM.svg
 
 DISTFILES +=
+
+RESOURCES += \
+    appico.qrc

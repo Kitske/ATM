@@ -24,7 +24,7 @@
     <enum>QFrame::Raised</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <widget class="QFrame" name="startMenu">
     <property name="styleSheet">
@@ -44,9 +44,6 @@
        <width>231</width>
        <height>231</height>
       </rect>
-     </property>
-     <property name="text">
-      <string/>
      </property>
      <property name="pixmap">
       <pixmap>../../Downloads/index.png</pixmap>
@@ -148,31 +145,57 @@ background-color: rgb(219, 0, 0);
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-   </widget>
-   <widget class="QFrame" name="cardInputMenu">
-    <widget class="QLabel" name="label3">
+    <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>340</x>
-       <y>110</y>
-       <width>231</width>
-       <height>231</height>
+       <x>0</x>
+       <y>0</y>
+       <width>100</width>
+       <height>50</height>
       </rect>
      </property>
-     <property name="text">
-      <string/>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
      </property>
-     <property name="pixmap">
-      <pixmap>../../Downloads/index.png</pixmap>
+     <property name="text">
+      <string>GoF Bank</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>0</y>
+       <width>200</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>0000 0000 0000 0000</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QFrame" name="cardInputMenu">
     <widget class="Line" name="line_3">
      <property name="geometry">
       <rect>
-       <x>480</x>
-       <y>140</y>
-       <width>100</width>
-       <height>30</height>
+       <x>0</x>
+       <y>50</y>
+       <width>911</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -205,7 +228,376 @@ background-color: rgb(219, 0, 0);
       </font>
      </property>
      <property name="text">
-      <string>Вставте карту</string>
+      <string>Виберіть послугу</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_3">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>469</y>
+       <width>321</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(99, 99, 99);
+color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Мої налаштування</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_4">
+     <property name="geometry">
+      <rect>
+       <x>588</x>
+       <y>469</y>
+       <width>321</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(99, 99, 99);
+color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Закінчити сеанс</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_5">
+     <property name="geometry">
+      <rect>
+       <x>588</x>
+       <y>369</y>
+       <width>321</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(99, 99, 99);
+color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Баланс карти</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_6">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>369</y>
+       <width>321</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(99, 99, 99);
+color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Видача готівки</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_7">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>269</y>
+       <width>321</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(99, 99, 99);
+color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Поповнити рахунок карти</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_8">
+     <property name="geometry">
+      <rect>
+       <x>588</x>
+       <y>269</y>
+       <width>321</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(99, 99, 99);
+color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Перевести гроші на іншу карту</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>100</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>GoF Bank</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>0</y>
+       <width>200</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>0000 0000 0000 0000</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QFrame" name="giveCashMenu">
+    <widget class="Line" name="lineGiveCashMenu">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>50</y>
+       <width>911</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(219, 0, 0);
+ background-color: rgb(219, 0, 0);
+ </string>
+     </property>
+     <property name="lineWidth">
+      <number>10</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label1GiveCashMenu">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>911</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft JhengHei UI</family>
+       <pointsize>20</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Видача готівки</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton1GiveCashMenu">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>469</y>
+       <width>321</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(99, 99, 99);
+ color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Назад</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton2GiveCashMenu">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>588</x>
+       <y>469</y>
+       <width>321</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(99, 99, 99);
+ color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Видати</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label2GiveCashMenu">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>100</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>GoF Bank</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label3GiveCashMenu">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>0</y>
+       <width>200</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>0000 0000 0000 0000</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEditGiveCashMenu">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>269</y>
+       <width>140</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>30</pointsize>
+      </font>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>255</x>
+       <y>220</y>
+       <width>400</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>15</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Введіть суму для видачі</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>299</y>
+       <width>55</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>грн.</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

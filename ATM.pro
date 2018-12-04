@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui\
+            network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,19 +29,25 @@ SOURCES += \
         mainwindow.cpp \
     cardinputdialog.cpp \
     givecashdialog.cpp \
-    addcashdialog.cpp
+    addcashdialog.cpp \
+    transactiondialog.cpp \
+    errordialog.cpp
 
 HEADERS += \
         mainwindow.h \
     cardinputdialog.h \
     givecashdialog.h \
-    addcashdialog.h
+    addcashdialog.h \
+    transactiondialog.h \
+    errordialog.h
 
 FORMS += \
         mainwindow.ui \
     cardinputdialog.ui \
     givecashdialog.ui \
-    addcashdialog.ui
+    addcashdialog.ui \
+    transactiondialog.ui \
+    errordialog.ui
 
 #RESOURCES += path/to/ATM.svg
 

@@ -9,6 +9,8 @@ AddCashDialog::AddCashDialog(QWidget *parent) :
     ui(new Ui::AddCashDialog)
 {
     ui->setupUi(this);
+    Qt::WindowFlags flags = this->windowFlags();
+    this->setWindowFlags(flags& (~Qt::WindowContextHelpButtonHint));
 }
 
 AddCashDialog::~AddCashDialog()

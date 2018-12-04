@@ -23,6 +23,8 @@ CardInputDialog::CardInputDialog(QWidget *parent) :
     QDialogButtonBox * bb = findChild<QDialogButtonBox*>("buttonBox");
     bb->button(QDialogButtonBox::Ok)->setText("Ок");
     bb->button(QDialogButtonBox::Cancel)->setText("Назад");
+    Qt::WindowFlags flags = this->windowFlags();
+    this->setWindowFlags(flags& (~Qt::WindowContextHelpButtonHint));
 }
 
 CardInputDialog::~CardInputDialog()
@@ -51,6 +53,13 @@ void CardInputDialog::on_buttonBox_accepted()
 
     if(num.contains(re)&&pin.contains(re1)&&isUserSigningInIsServerApproved(num,pin)){
         (static_cast<MainWindow *>(parent()))->startSessionWithCard(num);
+        QString s = QString("http://localhost:1337/api/user/authorize/");
+        QUrl url = QUrl(s);
+        QString jsonString = QString("{\"number\":\""+num+"\",\"pin\":\""+pin+"\"}");
+        QNetworkRequest qnr =QNetworkRequest(url);
+        qnr.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        (static_cast<MainWindow *>(parent()))->getMgr()->post(qnr, jsonString.toUtf8());
+
     }
     else{
 

@@ -3,10 +3,22 @@
 #include <iostream>
 #include <QRegExpValidator>
 #include <cstdlib>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QHttpPart>
+
+#include <QtNetwork/qnetworkaccessmanager.h>
+#include <QtNetwork/qhttpmultipart.h>
+
+#include <QJsonValue>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),moneyNominalValueCount(new int[6]),cardDial(this),giveCashDial(this),currentCardNum("0000000000000000"),addCashDial(this)
+    ui(new Ui::MainWindow),moneyNominalValueCount(new int[6]),
+    cardDial(this),giveCashDial(this),currentCardNum("0000000000000000"),
+    addCashDial(this),transactionDial(this),errorDial(this),mgr(new QNetworkAccessManager(this))
 {
     ui->setupUi(this);
 
@@ -24,26 +36,62 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QWidget * cw = qsw->widget(2);
     QWidget * cw1 = qsw->widget(3);
+    QWidget * cw3 = qsw->widget(5);
 
-    QLineEdit * qle = cw->findChild<QLineEdit*>("lineEditGiveCashMenu");
-    QLineEdit * qle1 = cw1->findChild<QLineEdit*>("lineEditAddCash");
+    QLineEdit * le = cw->findChild<QLineEdit*>("lineEditGiveCashMenu");
+    QLineEdit * le1 = cw1->findChild<QLineEdit*>("lineEditAddCash");
+    QLineEdit * le2 = cw3->findChild<QLineEdit *>("lineEditTransaction");
+    QLineEdit * le3 = cw3->findChild<QLineEdit *>("lineEditTransaction_2");
 
     QRegExp re1("^(10000)|([1-9]\\d?\\d?0)$");
     QRegExpValidator *validator1 = new QRegExpValidator(re1, this);
-    qle->setValidator(validator1);
+    le->setValidator(validator1);
 
     QRegExp re2("^((1\\d\\d\\d)|(2000)|([1-9]\\d?\\d?))0$");
     QRegExpValidator *validator2 = new QRegExpValidator(re2, this);
-    qle1->setValidator(validator2);
+    le1->setValidator(validator2);
+
+    QRegExp re3("^\\d{16}$");
+    QRegExpValidator *validator3 = new QRegExpValidator(re3, this);
+    le3->setValidator(validator3);
+
+    QRegExp re4("^((8000)|([1-7]\\d{3})|([1-9]\\d?\\d?))0$");
+    QRegExpValidator *validator4 = new QRegExpValidator(re4, this);
+    le2->setValidator(validator4);
 
     QPushButton * qpb = cw->findChild<QPushButton *>("pushButton2GiveCashMenu");
     QPushButton * qpb1 = cw1->findChild<QPushButton *>("addCashPushButton_4");
-
+    QPushButton * qpb2 = cw3->findChild<QPushButton *>("transactionPushButton_4");
     qpb->setDisabled(true);
     qpb1->setDisabled(true);
+    qpb2->setDisabled(true);
 
     qsw->setCurrentIndex(0);
 
+    connect(mgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(onFinish(QNetworkReply*)));
+    connect(mgr, SIGNAL(finished(QNetworkReply*)), mgr, SLOT(deleteLater()));
+}
+
+QNetworkAccessManager * MainWindow::getMgr(){
+    return mgr;
+}
+
+void MainWindow::onFinish(QNetworkReply* reply)
+{
+  if (reply->error() == QNetworkReply::NoError)
+    {
+      QByteArray content= reply->readAll();
+      QString body(content);
+      QString codeAttr = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toString();
+      std::cout << codeAttr.toStdString()<<std::endl;
+      std::cout <<body.toStdString()<< std::endl; // ok
+    } else {
+       QByteArray content= reply->readAll();
+       QString body(content);
+       std::cout <<body.toStdString()<< std::endl; // ok
+        //empty, but must be exist
+    }
+    mgr->deleteLater();
 }
 
 MainWindow::~MainWindow()
@@ -60,9 +108,9 @@ void MainWindow::startSessionWithCard(const QString& cardNum){
     QStackedWidget *qsw = findChild<QStackedWidget*>("stackedWidget");
     Q_ASSERT(qsw);
 
-    QWidget * services = qsw->widget(1);
+    QWidget * cwServices = qsw->widget(1);
 
-    QLabel * cardNumLabel = services->findChild<QLabel*>("label_5");
+    QLabel * cardNumLabel = cwServices->findChild<QLabel*>("label_5");
     QString cardNumWithSpaces = cardNum.mid(0,4)+" "+cardNum.mid(4,4)+" "+cardNum.mid(8,4)+" "+cardNum.mid(12,4);
     cardNumLabel->setText(cardNumWithSpaces);
 
@@ -73,6 +121,14 @@ void MainWindow::startSessionWithCard(const QString& cardNum){
     QWidget * cw1 = qsw->widget(3);
     QLabel * cardNumLabel2 = cw1->findChild<QLabel *>("addCashLabel_5");
     cardNumLabel2->setText(cardNumWithSpaces);
+
+    QWidget * cw2 = qsw->widget(4);
+    QLabel * cardNumLabel3 = cw2->findChild<QLabel *>("checkBalanceLabel_5");
+    cardNumLabel3->setText(cardNumWithSpaces);
+
+    QWidget * cw3 = qsw->widget(5);
+    QLabel * cardNumLabel4 = cw3->findChild<QLabel *>("transactionLabel_5");
+    cardNumLabel4->setText(cardNumWithSpaces);
 
     currentCardNum=cardNum;
     nextMenu(0,1);
@@ -110,6 +166,10 @@ void MainWindow::on_pushButton1GiveCashMenu_clicked()
     QLineEdit * le = cw->findChild<QLineEdit *>("lineEditGiveCashMenu");
     Q_ASSERT(le);
     le->setText("");
+
+    QPushButton * qpb =cw->findChild<QPushButton *>("pushButton2GiveCashMenu");
+    qpb->setDisabled(true);
+
     backToLastMenu();
 }
 
@@ -194,6 +254,10 @@ void MainWindow::on_addCashPushButton_3_clicked()
     QLineEdit * le = cw->findChild<QLineEdit *>("lineEditAddCash");
     Q_ASSERT(le);
     le->setText("");
+
+    QPushButton * qpb =cw->findChild<QPushButton *>("addCashPushButton_4");
+    qpb->setDisabled(true);
+
     backToLastMenu();
 }
 
@@ -224,6 +288,103 @@ void MainWindow::on_lineEditAddCash_textChanged(const QString &t)
     if(t.contains(re1)){
         qpb->setDisabled(false);
     }else{
+        qpb->setDisabled(true);
+    }
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    nextMenu(1,4);
+}
+
+void MainWindow::on_checkBalancePushButton_3_clicked()
+{
+    backToLastMenu();
+}
+
+void MainWindow::on_pushButton_8_clicked()
+{
+    nextMenu(1,5);
+}
+
+void MainWindow::on_transactionPushButton_3_clicked()
+{
+    QStackedWidget * qsw = findChild<QStackedWidget*>("stackedWidget");
+    Q_ASSERT(qsw);
+
+    QWidget * cw = qsw->widget(5);
+
+    QLineEdit * le = cw->findChild<QLineEdit *>("lineEditTransaction");
+    QLineEdit * le1 = cw->findChild<QLineEdit *>("lineEditTransaction_2");
+
+    Q_ASSERT(le);
+    Q_ASSERT(le1);
+
+    le->setText("");
+    le1->setText("");
+
+    QPushButton * qpb =cw->findChild<QPushButton *>("transactionPushButton_4");
+    qpb->setDisabled(true);
+
+    backToLastMenu();
+}
+
+//zdisnutu perekaz
+void MainWindow::on_transactionPushButton_4_clicked()
+{
+    QStackedWidget *qsw = findChild<QStackedWidget*>("stackedWidget");
+    QWidget * cw = qsw->widget(5);
+    QString cardS1 = (cw->findChild<QLabel *>("transactionLabel_5"))->text();
+    QLineEdit * le1 = cw->findChild<QLineEdit *>("lineEditTransaction");
+    QLineEdit * le2 = cw->findChild<QLineEdit *>("lineEditTransaction_2");
+    QString le2Text = le2->text();
+    QRegExp re1("^((8000)|([1-7]\\d{3})|([1-9]\\d?\\d?))0$");
+    QRegExp re2("^\\d{16}$");
+    QString sumS = le1->text();
+    if(!((le1->text()).contains(re1))){
+        QString errmsg1 =QString("Неправильний формат суми для переказу");
+        errorDial.message(errmsg1);
+    }
+    else if(!((le2->text()).contains(re2))){
+        QString errmsg2 =QString("Неправильний формат номеру карти отримувача");
+        errorDial.message(errmsg2);
+    }
+    else {
+        QString cardS2 = le2Text.mid(0,4)+" "+le2Text.mid(4,4)+" "+le2Text.mid(8,4)+" "+le2Text.mid(12,4);
+        transactionDial.changeLabels(cardS1,sumS,cardS2);
+        transactionDial.show();
+    }
+
+}
+
+void MainWindow::on_lineEditTransaction_textChanged(const QString &t)
+{
+    QStackedWidget *qsw = findChild<QStackedWidget*>("stackedWidget");
+    QWidget * cw = qsw->widget(5);
+    QPushButton * qpb = cw->findChild<QPushButton *>("transactionPushButton_4");
+    QLineEdit * le2 = cw->findChild<QLineEdit *>("lineEditTransaction_2");
+    QRegExp re1("^((8000)|([1-7]\\d{3})|([1-9]\\d?\\d?))0$");
+    QRegExp re2("^\\d{16}$");
+    if(t.contains(re1)&&le2->text().contains(re2)){
+        qpb->setDisabled(false);
+    }
+    else{
+        qpb->setDisabled(true);
+    }
+}
+
+void MainWindow::on_lineEditTransaction_2_textChanged(const QString &t)
+{
+    QStackedWidget *qsw = findChild<QStackedWidget*>("stackedWidget");
+    QWidget * cw = qsw->widget(5);
+    QPushButton * qpb = cw->findChild<QPushButton *>("transactionPushButton_4");
+    QLineEdit * le1 = cw->findChild<QLineEdit *>("lineEditTransaction");
+    QRegExp re1("^((8000)|([1-7]\\d{3})|([1-9]\\d?\\d?))0$");
+    QRegExp re2("^\\d{16}$");
+    if(t.contains(re2)&&le1->text().contains(re1)){
+        qpb->setDisabled(false);
+    }
+    else{
         qpb->setDisabled(true);
     }
 }

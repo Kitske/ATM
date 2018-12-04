@@ -305,9 +305,30 @@ void MainWindow::on_addCashPushButton_4_clicked()
 }
 
 void MainWindow::processAddingCash(int value){
+    const QString valueCopy = QString::number(value);
     QString n = currentCardNum.mid(0,4)+" "+currentCardNum.mid(4,4)+" "+currentCardNum.mid(8,4)+" "+currentCardNum.mid(12,4);
-    addCashDial.changeLabels(n,value);
-    addCashDial.show();
+    QString s = QString("http://localhost:1337/api/balance/");
+    QUrl url = QUrl(s);
+    QString jsonString = QString("{\"number\":\""+currentCardNum+"\",\"amount\":\""+valueCopy+"\"}");
+    QNetworkRequest qnr(url);
+    qnr.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QNetworkReply * repl = mgr->post(qnr, jsonString.toUtf8());
+    QEventLoop loop;
+    connect(repl, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+    QPair<QString,QString> qp = getLastRequestInfo();
+    int x = QString::compare((qp.first),QString("200"), Qt::CaseInsensitive);
+    if(x==0){
+        addCashDial.changeLabels(n,value);
+        addCashDial.show();
+    }
+    else {
+        x = QString::compare((qp.first),QString("500"), Qt::CaseInsensitive);
+        if(x==0){
+            QString e1("Помилка сервера");
+            err(e1);
+        }
+    }
 }
 
 void MainWindow::on_lineEditAddCash_textChanged(const QString &t)

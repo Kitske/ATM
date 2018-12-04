@@ -8,7 +8,8 @@
 #include "errordialog.h"
 #include <QMainWindow>
 #include <stack>
-
+#include <QPair>
+#include <QString>
 #include <QtNetwork/QNetworkReply>
 
 namespace Ui {
@@ -25,6 +26,8 @@ public:
     void startSessionWithCard(const QString&);
     void backToLastMenu();
     QNetworkAccessManager * getMgr();
+    QPair<QString,QString> getLastRequestInfo();
+    void err(QString& s);
 private slots:
     void on_pushButton_clicked();
     void on_pushButton_4_clicked();
@@ -34,7 +37,7 @@ private slots:
     void on_pushButton2GiveCashMenu_clicked();
     void processGivingCash(int value);
     void processAddingCash(int value);
-    void onFinish(QNetworkReply*);
+    void onRequestFinish(QNetworkReply* reply);
     void on_lineEditGiveCashMenu_textChanged(const QString &arg1);
 
     void on_pushButton_7_clicked();
@@ -70,6 +73,7 @@ private:
     QString currentCardNum;
     AddCashDialog addCashDial;
     QNetworkAccessManager * mgr;
+    QPair<QString,QString> lastRequestInfo;
 };
 
 #endif // MAINWINDOW_H

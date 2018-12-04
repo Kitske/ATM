@@ -3,6 +3,8 @@
 #include <QRegExpValidator>
 #include "mainwindow.h"
 #include <QPushButton>
+#include <iostream>
+#include "errordialog.h"
 
 CardInputDialog::CardInputDialog(QWidget *parent) :
     QDialog(parent),
@@ -50,19 +52,48 @@ void CardInputDialog::on_buttonBox_accepted()
     QString pin = le1->text();
     QRegExp re("^\\d{16}$");
     QRegExp re1("^\\d{4}$");
-
-    if(num.contains(re)&&pin.contains(re1)&&isUserSigningInIsServerApproved(num,pin)){
+    QString s = QString("http://localhost:1337/api/user/authorize/");
+    QUrl url = QUrl(s);
+    QString jsonString = QString("{\"number\":\""+num+"\",\"pin\":\""+pin+"\"}");
+    QNetworkRequest qnr =QNetworkRequest(url);
+    qnr.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QNetworkReply * repl = (static_cast<MainWindow *>(parent()))->getMgr()->post(qnr, jsonString.toUtf8());
+    QEventLoop loop;
+    connect(repl, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+    QPair<QString,QString> qp = (static_cast<MainWindow *>(parent()))->getLastRequestInfo();
+    int x = QString::compare((qp.first),QString("200"), Qt::CaseInsensitive);
+    QString qs =qp.first;
+    if(x==0){
         (static_cast<MainWindow *>(parent()))->startSessionWithCard(num);
-        QString s = QString("http://localhost:1337/api/user/authorize/");
-        QUrl url = QUrl(s);
-        QString jsonString = QString("{\"number\":\""+num+"\",\"pin\":\""+pin+"\"}");
-        QNetworkRequest qnr =QNetworkRequest(url);
-        qnr.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-        (static_cast<MainWindow *>(parent()))->getMgr()->post(qnr, jsonString.toUtf8());
 
     }
-    else{
+    else {
+        x = QString::compare((qp.first),QString("404"), Qt::CaseInsensitive);
+        if(x==0){
+            QString e1 =QString("Карти з таким номером немає в базі даних");
+            (static_cast<MainWindow *>(parent()))->err(e1);
+        }
+        else{
+            x = QString::compare((qp.first),QString("403"), Qt::CaseInsensitive);
+            if(x==0){
+                x = QString::compare((qp.second),QString("{\"reason\":\"auth tries\"}"), Qt::CaseInsensitive);
+                if(x==0){
+                QString e2 =QString("Карта заблокована");
+                (static_cast<MainWindow *>(parent()))->err(e2);
+                }else{
+                    x = QString::compare((qp.second),QString("{\"reason\":\"pin\"}"), Qt::CaseInsensitive);
+                    if(x==0){
+                    QString e3 =QString("Неправильний PIN-код");
+                    (static_cast<MainWindow *>(parent()))->err(e3);
+                    }
 
+                }
+            }else{
+                QString e4 =QString("Помилка сервера");
+                (static_cast<MainWindow *>(parent()))->err(e4);
+            }
+        }
     }
     le->setText("");
     le1->setText("");

@@ -18,7 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),moneyNominalValueCount(new int[6]),
     cardDial(this),giveCashDial(this),currentCardNum("0000000000000000"),
-    addCashDial(this),transactionDial(this),errorDial(this),mgr(new QNetworkAccessManager(this))
+    addCashDial(this),transactionDial(this),errorDial(this),
+    mgr(new QNetworkAccessManager(this)),lastRequestInfo(QPair<QString,QString>(QString(" "),QString(" ")))
 {
     ui->setupUi(this);
 
@@ -68,30 +69,35 @@ MainWindow::MainWindow(QWidget *parent) :
 
     qsw->setCurrentIndex(0);
 
-    connect(mgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(onFinish(QNetworkReply*)));
-    connect(mgr, SIGNAL(finished(QNetworkReply*)), mgr, SLOT(deleteLater()));
+    connect(mgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(onRequestFinish(QNetworkReply*)));
 }
 
 QNetworkAccessManager * MainWindow::getMgr(){
     return mgr;
 }
 
-void MainWindow::onFinish(QNetworkReply* reply)
+
+void MainWindow::onRequestFinish(QNetworkReply* reply)
 {
-  if (reply->error() == QNetworkReply::NoError)
-    {
+  /*if (reply->error() == QNetworkReply::NoError)
+    {*/
       QByteArray content= reply->readAll();
       QString body(content);
       QString codeAttr = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toString();
       std::cout << codeAttr.toStdString()<<std::endl;
       std::cout <<body.toStdString()<< std::endl; // ok
-    } else {
+    /*} else {
        QByteArray content= reply->readAll();
        QString body(content);
        std::cout <<body.toStdString()<< std::endl; // ok
         //empty, but must be exist
-    }
-    mgr->deleteLater();
+    }*/
+      lastRequestInfo=QPair<QString,QString>(codeAttr,body);
+      reply->deleteLater();
+}
+
+QPair<QString,QString> MainWindow::getLastRequestInfo(){
+    return lastRequestInfo;
 }
 
 MainWindow::~MainWindow()
@@ -327,6 +333,10 @@ void MainWindow::on_transactionPushButton_3_clicked()
     qpb->setDisabled(true);
 
     backToLastMenu();
+}
+
+void MainWindow::err(QString& s){
+    errorDial.message(s);
 }
 
 //zdisnutu perekaz

@@ -13,6 +13,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QBuffer>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -192,7 +193,8 @@ void MainWindow::processGivingCash(int value){
     int * tempNominalValueCount = new int[6];
     for(int i=0;i<6;++i)
         tempNominalValueCount[i]=0;
-    const int valueCopy(value);
+    const QString valueCopy = QString::number(value);
+    const int valueCopyInt(value);
     while(div(value,500).quot>0&&moneyNominalValueCount[0]>0){
         ++tempNominalValueCount[0];
         value-=500;
@@ -223,11 +225,37 @@ void MainWindow::processGivingCash(int value){
             moneyNominalValueCount[i]-=tempNominalValueCount[i];
             processedAllValues+=tempNominalValueCount[i];
         }
-        giveCashDial.changeLabels(valueCopy,processedAllValues,tempNominalValueCount);
-        giveCashDial.show();
+
+        QString s = QString("http://localhost:1337/api/balance/");
+        QUrl url = QUrl(s);
+        QString jsonString = QString("{\"number\":\""+currentCardNum+"\",\"amount\":\"-"+valueCopy+"\"}");
+        QNetworkRequest qnr(url);
+        qnr.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        QNetworkReply * repl = mgr->post(qnr, jsonString.toUtf8());
+        QEventLoop loop;
+        connect(repl, SIGNAL(finished()), &loop, SLOT(quit()));
+        loop.exec();
+        QPair<QString,QString> qp = getLastRequestInfo();
+        int x = QString::compare((qp.first),QString("200"), Qt::CaseInsensitive);
+        if(x==0){
+            giveCashDial.changeLabels(valueCopyInt,processedAllValues,tempNominalValueCount);
+            giveCashDial.show();
+        }
+        else {
+            x = QString::compare((qp.first),QString("412"), Qt::CaseInsensitive);
+            if(x==0){
+                QString e1("Недостатньо коштів");
+                err(e1);
+            }
+            else{
+                QString e2("Помилка сервера");
+                err(e2);
+            }
+        }
     }
     else{
-
+        QString eLast("В банкоматі не вистачає купюр для видачі "+valueCopy+" грн.");
+        err(eLast);
     }
 }
 
@@ -300,6 +328,23 @@ void MainWindow::on_lineEditAddCash_textChanged(const QString &t)
 
 void MainWindow::on_pushButton_5_clicked()
 {
+    //request
+    QString s = QString("http://localhost:1337/api/balance/?number="+currentCardNum);
+    QUrl url = QUrl(s);
+    QNetworkRequest qnr =QNetworkRequest(url);
+    QNetworkReply * repl = mgr->get(qnr);
+    QEventLoop loop;
+    connect(repl, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+    QPair<QString,QString> qp = getLastRequestInfo();
+    QString b = qp.second.remove(0,11);
+    b.chop(1);
+    QStackedWidget *qsw = findChild<QStackedWidget*>("stackedWidget");
+    Q_ASSERT(qsw);
+
+    QWidget * cw = qsw->widget(4);
+    QLabel * l = cw->findChild<QLabel *>("checkBalanceLabel_7");
+    l->setText("Баланс : "+b+" грн.");
     nextMenu(1,4);
 }
 

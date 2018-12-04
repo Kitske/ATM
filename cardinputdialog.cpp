@@ -24,6 +24,7 @@ CardInputDialog::CardInputDialog(QWidget *parent) :
     le1->setValidator(validator1);
     QDialogButtonBox * bb = findChild<QDialogButtonBox*>("buttonBox");
     bb->button(QDialogButtonBox::Ok)->setText("Ок");
+    bb->button(QDialogButtonBox::Ok)->setDisabled(true);
     bb->button(QDialogButtonBox::Cancel)->setText("Назад");
     Qt::WindowFlags flags = this->windowFlags();
     this->setWindowFlags(flags& (~Qt::WindowContextHelpButtonHint));
@@ -34,16 +35,11 @@ CardInputDialog::~CardInputDialog()
     delete ui;
 }
 
-bool CardInputDialog::isUserSigningInIsServerApproved(QString & cardNumber,QString & pin){
-    bool res = true;
-    //here should be request to the server
-
-    //
-    return res;
-}
-
 void CardInputDialog::on_buttonBox_accepted()
 {
+    QDialogButtonBox * bb = findChild<QDialogButtonBox*>("buttonBox");
+    QPushButton * qpb = bb->button(QDialogButtonBox::Ok);
+    qpb->setDisabled(true);
     QLineEdit *le = findChild<QLineEdit*>("lineEdit");
     Q_ASSERT(le);
     QLineEdit *le1 = findChild<QLineEdit*>("lineEdit_2");
@@ -97,4 +93,32 @@ void CardInputDialog::on_buttonBox_accepted()
     }
     le->setText("");
     le1->setText("");
+}
+
+void CardInputDialog::on_lineEdit_textChanged(const QString &t)
+{
+    QRegExp re("^\\d{16}$");
+    QRegExp re1("^\\d{4}$");
+    QDialogButtonBox * bb = findChild<QDialogButtonBox*>("buttonBox");
+    QPushButton * qpb = bb->button(QDialogButtonBox::Ok);
+    QLineEdit * le = findChild<QLineEdit *>("lineEdit_2");
+    if(t.contains(re)&& (le->text()).contains(re1)){
+        qpb->setDisabled(false);
+    }else{
+        qpb->setDisabled(true);
+    }
+}
+
+void CardInputDialog::on_lineEdit_2_textChanged(const QString &t)
+{
+    QRegExp re("^\\d{16}$");
+    QRegExp re1("^\\d{4}$");
+    QDialogButtonBox * bb = findChild<QDialogButtonBox*>("buttonBox");
+    QPushButton * qpb = bb->button(QDialogButtonBox::Ok);
+    QLineEdit * le = findChild<QLineEdit *>("lineEdit");
+    if(t.contains(re1)&& (le->text()).contains(re)){
+        qpb->setDisabled(false);
+    }else{
+        qpb->setDisabled(true);
+    }
 }

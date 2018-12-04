@@ -48,7 +48,7 @@
     <enum>QFrame::Raised</enum>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>0</number>
    </property>
    <widget class="QFrame" name="startMenu">
     <property name="styleSheet">
@@ -76,7 +76,7 @@
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
-       <x>0</x>
+       <x>295</x>
        <y>469</y>
        <width>321</width>
        <height>81</height>
@@ -96,32 +96,7 @@
 color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string>✓ Операції з картою</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_2">
-     <property name="geometry">
-      <rect>
-       <x>588</x>
-       <y>469</y>
-       <width>321</width>
-       <height>81</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Microsoft YaHei UI</family>
-       <pointsize>11</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(99, 99, 99);
-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Операції без карти</string>
+      <string>✓ Почати сеанс</string>
      </property>
     </widget>
     <widget class="Line" name="line_2">
@@ -258,32 +233,10 @@ background-color: rgb(219, 0, 0);
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_3">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>469</y>
-       <width>321</width>
-       <height>81</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>11</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(99, 99, 99);
-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string> 	⚙ Мої налаштування</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="pushButton_4">
      <property name="geometry">
       <rect>
-       <x>588</x>
+       <x>0</x>
        <y>469</y>
        <width>321</width>
        <height>81</height>

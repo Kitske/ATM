@@ -80,19 +80,10 @@ QNetworkAccessManager * MainWindow::getMgr(){
 
 void MainWindow::onRequestFinish(QNetworkReply* reply)
 {
-  /*if (reply->error() == QNetworkReply::NoError)
-    {*/
       QByteArray content= reply->readAll();
       QString body(content);
       QString codeAttr = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toString();
-      std::cout << codeAttr.toStdString()<<std::endl;
-      std::cout <<body.toStdString()<< std::endl; // ok
-    /*} else {
-       QByteArray content= reply->readAll();
-       QString body(content);
-       std::cout <<body.toStdString()<< std::endl; // ok
-        //empty, but must be exist
-    }*/
+
       lastRequestInfo=QPair<QString,QString>(codeAttr,body);
       reply->deleteLater();
 }
@@ -349,7 +340,6 @@ void MainWindow::on_lineEditAddCash_textChanged(const QString &t)
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    //request
     QString s = QString("http://localhost:1337/api/balance/?number="+currentCardNum);
     QUrl url = QUrl(s);
     QNetworkRequest qnr =QNetworkRequest(url);
@@ -405,7 +395,6 @@ void MainWindow::err(QString& s){
     errorDial.message(s);
 }
 
-//zdisnutu perekaz
 void MainWindow::on_transactionPushButton_4_clicked()
 {
     QStackedWidget *qsw = findChild<QStackedWidget*>("stackedWidget");

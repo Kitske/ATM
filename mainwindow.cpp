@@ -426,10 +426,41 @@ void MainWindow::on_transactionPushButton_4_clicked()
         errorDial.message(errmsg2);
     }
     else {
-        QString cardS2 = le2Text.mid(0,4)+" "+le2Text.mid(4,4)+" "+le2Text.mid(8,4)+" "+le2Text.mid(12,4);
-        transactionDial.changeLabels(cardS1,sumS,cardS2);
-        transactionDial.show();
-    }
+        QString s = QString("http://localhost:1337/api/transfer/");
+        QUrl url = QUrl(s);
+        QString jsonString = QString("{\"from\":\""+currentCardNum+"\",\"to\":\""+(le2->text())+"\",\"amount\":\""+sumS+"\"}");
+        QNetworkRequest qnr(url);
+        qnr.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        QNetworkReply * repl = mgr->post(qnr, jsonString.toUtf8());
+        QEventLoop loop;
+        connect(repl, SIGNAL(finished()), &loop, SLOT(quit()));
+        loop.exec();
+        QPair<QString,QString> qp = getLastRequestInfo();
+        int x = QString::compare((qp.first),QString("200"), Qt::CaseInsensitive);
+        if(x==0){
+            QString cardS2 = le2Text.mid(0,4)+" "+le2Text.mid(4,4)+" "+le2Text.mid(8,4)+" "+le2Text.mid(12,4);
+            transactionDial.changeLabels(cardS1,sumS,cardS2);
+            transactionDial.show();
+        }
+        else {
+            x = QString::compare((qp.first),QString("404"), Qt::CaseInsensitive);
+            if(x==0){
+                QString e1("Картки отримувача немає в базі даних");
+                err(e1);
+            }
+            else{
+                x = QString::compare((qp.first),QString("412"), Qt::CaseInsensitive);
+                if(x==0){
+                    QString e2("Недостатньо коштів");
+                    err(e2);
+                }
+                else{
+                    QString e3("Помилка сервера");
+                    err(e3);
+                }
+            }
+        }
+   }
 
 }
 
